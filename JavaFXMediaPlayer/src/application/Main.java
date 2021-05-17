@@ -3,7 +3,8 @@
  * 2. Run configuration: VM params: --module-path "C:\javafx\javafx-sdk-11.0.2\lib" --add-modules=javafx.controls,javafx.fxml
  */
 package application;
-	
+
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
