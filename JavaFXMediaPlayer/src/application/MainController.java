@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;*/
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 //import javafx.beans.property.SimpleDoubleProperty;
@@ -15,9 +17,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 
 public class MainController implements Initializable {
@@ -31,14 +36,14 @@ public class MainController implements Initializable {
 	
 	@FXML
 	private Label messageDisplayer;
+	@FXML
+	private Slider volumeSlider;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// Openning the example openning file
 		String filePath = new File("src/resources/testVideo.mp4").getAbsolutePath();
-		media = new Media(new File(filePath).toURI().toString());
-		mediaPlayerMain = new MediaPlayer(media);
-		mvMain.setMediaPlayer(mediaPlayerMain);
+		loadClip (new File(filePath));
 		
 		// binding the Media Player's size to the size of the window
 		DoubleProperty width = mvMain.fitWidthProperty();
@@ -53,6 +58,14 @@ public class MainController implements Initializable {
 		// bind to duration milliseconds to show the time on the label?
 		//DoubleProperty timeMili = new SimpleDoubleProperty(mediaPlayerMain.getCurrentTime().toMillis());
 		//timeMili.bind(mediaPlayerMain.getCurrentTime().toMillis());
+		
+		volumeSlider.setValue(mediaPlayerMain.getVolume() * 100);
+		volumeSlider.valueProperty().addListener(new InvalidationListener() {
+
+			@Override
+			public void invalidated(Observable arg0) {
+				mediaPlayerMain.setVolume(volumeSlider.getValue() / 100.0);
+			}});
 	}
 	
 	public void beginning(ActionEvent event)
@@ -111,6 +124,23 @@ public class MainController implements Initializable {
 			}
 		}, 0, 1, TimeUnit.SECONDS);*/
 		
+	}
+	
+	public void openClip(ActionEvent event)
+	{
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Select playable file");
+		fc.getExtensionFilters().add(new ExtensionFilter("Movie files", "*.mp4", "*.avi", "*.mov", "*.gif"));
+		File selectedFile = fc.showOpenDialog(null);
+		
+		loadClip(selectedFile);
+	}
+
+	private void loadClip (File fileToLoad)
+	{
+		media = new Media(fileToLoad.toURI().toString());
+		mediaPlayerMain = new MediaPlayer(media);
+		mvMain.setMediaPlayer(mediaPlayerMain);
 	}
 
 }
