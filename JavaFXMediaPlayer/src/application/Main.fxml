@@ -29,18 +29,20 @@
             <Button mnemonicParsing="false" onAction="#playPause" text="PLAY/PAUSE" />
             <Button mnemonicParsing="false" onAction="#plus10sec" text="+10 sec" />
             <Button mnemonicParsing="false" onAction="#speedUp" text="Speed Up" />
+            <Slider fx:id="volumeSlider" prefHeight="50.0" />
             <VBox prefHeight="200.0" prefWidth="400.0">
-               <children>
-                  <Label fx:id="messageDisplayer" maxWidth="400.0" prefHeight="50.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Label>
-                  <Slider fx:id="volumeSlider" prefHeight="50.0" />
-               </children>
                <HBox.margin>
                   <Insets left="200.0" />
                </HBox.margin>
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="messageDisplayer" prefHeight="100.0" prefWidth="200.0" />
+                        <Label fx:id="timeDisplayer" prefHeight="100.0" prefWidth="200.0" text="TIME:" />
+                     </children>
+                  </HBox>
+                  <Slider fx:id="timeSlider" prefHeight="100.0" />
+               </children>
             </VBox>
          </children>
       </HBox>
@@ -51,12 +53,6 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#openClip" text="Open new file..." />
-                  <MenuItem mnemonicParsing="false" text="Close current file" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
