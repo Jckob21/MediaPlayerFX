@@ -66,8 +66,17 @@ public class MainController implements Initializable {
 			@Override
 			public void invalidated(Observable arg0) {
 				mediaPlayerMain.setVolume(volumeSlider.getValue() / 100.0);
-			}});
+		}});
 		
+		if (mediaPlayerMain.getStatus() == MediaPlayer.Status.UNKNOWN) {
+	        mediaPlayerMain.statusProperty().addListener((obs, oldStatus, newStatus) -> {
+	            if (newStatus == MediaPlayer.Status.READY) {
+	                initializeSlider();
+	            } 
+	        });
+	    } else {
+	        initializeSlider();
+	    }
 		
 	}
 	
@@ -182,7 +191,11 @@ public class MainController implements Initializable {
 		height.bind(Bindings.selectDouble(mvMain.sceneProperty(), "height"));
 	}
 
-	
+	private void initializeSlider() {
+	    timeSlider.setMax(mediaPlayerMain.getTotalDuration().toSeconds());
+	    mediaPlayerMain.currentTimeProperty().addListener((obs, oldTime, newTime) -> 
+	        timeSlider.setValue(newTime.toSeconds()));
+	}
 	
 	////////////////////THIS IS WORKING REGARDING TIME
 	//TODO If put in initialize method the duration is NAN so it is called to early, fix it!
